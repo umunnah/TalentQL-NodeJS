@@ -6,11 +6,16 @@ const helmet = require('helmet');
 const xssClean = require('xss-clean');
 const morgan =  require('morgan');
 const multer = require('multer');
+const cors = require('cors');
+const mongoSanitize = require('express-mongo-sanitize');
 
 
-// dotenv.config({path : './config/config.env'});
+dotenv.config({path : './.env'});
 
 const app = express();
+
+//
+app.use(cors());
 
 // Body parser
 app.use(express.json());
@@ -32,7 +37,7 @@ app.use(cookieParser());
 
 
 // Sanitize data to prevent NoSql injection
-// app.use(mongoSanitize());
+app.use(mongoSanitize());
 
 // Set security headers
 app.use(helmet());
@@ -46,7 +51,7 @@ app.use(hpp());
 
 // app.use(errorHandler);
 
-const PORT = process.env.PORT || 5000
+const PORT = process.env.PORT || 8000
 
 const server  = app.listen(PORT, console.log(`Server is running in ${process.env.NODE_ENV} mode on port ${PORT}`));
 
