@@ -4,7 +4,8 @@
   "description": "A RESTful API that supports the posts functionality of Facebook",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "SET NODE_ENV=production & node index",
+    "dev": "nodemon index"
   },
   "repository": {
     "type": "git",
@@ -15,5 +16,20 @@
   "bugs": {
     "url": "https://github.com/umunnah/TalentQL-NodeJS/issues"
   },
-  "homepage": "https://github.com/umunnah/TalentQL-NodeJS#readme"
+  "homepage": "https://github.com/umunnah/TalentQL-NodeJS#readme",
+  "devDependencies": {
+    "nodemon": "^2.0.7"
+  },
+  "dependencies": {
+    "cookie-parser": "^1.4.5",
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "helmet": "^4.5.0",
+    "hpp": "^0.2.3",
+    "jsonwebtoken": "^8.5.1",
+    "morgan": "^1.10.0",
+    "multer": "^1.4.2",
+    "nodemailer": "^6.5.0",
+    "xss-clean": "^0.1.1"
+  }
 }
