@@ -1,62 +1,21 @@
-const express =  require('express');
 const dotenv = require('dotenv');
-const cookieParser = require('cookie-parser');
-const hpp = require('hpp');
-const helmet = require('helmet');
-const xssClean = require('xss-clean');
-const morgan =  require('morgan');
-const multer = require('multer');
-const cors = require('cors');
-const mongoSanitize = require('express-mongo-sanitize');
-
+const app = require('./src/app');
+const {connectDB} = require('./config/db');
 
 dotenv.config({path : './.env'});
 
-const app = express();
 
-//
-app.use(cors());
+//connect to database
+connectDB();
 
-// Body parser
-app.use(express.json());
-
-// for parsing application/xwww-form-urlencoded
-app.use(express.urlencoded({extended: true}));
-
-// for parsing multipart/form-data
-// Middleware to upload files
-const upload = multer();
-app.use(upload.array()); 
-
-
-// Cookie parser
-app.use(cookieParser());
-
-// Dev logger middleware
-(process.env.NODE_ENV === 'development') ? app.use(morgan('dev')) : '';
-
-
-// Sanitize data to prevent NoSql injection
-app.use(mongoSanitize());
-
-// Set security headers
-app.use(helmet());
-
-// Prevent XSS attacks
-app.use(xssClean());
-
-// Prevent http param pollution
-app.use(hpp());
-
-
-// app.use(errorHandler);
 
 const PORT = process.env.PORT || 8000
-
 const server  = app.listen(PORT, console.log(`Server is running in ${process.env.NODE_ENV} mode on port ${PORT}`));
 
 //Handle promise rejection
 
 process.on('unhandledRejection', (err,promise) => {
+  console.log(`Error: ${err.message}`)
 	server.close(() => process.exit(1));
 });
+
