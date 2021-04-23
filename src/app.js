@@ -1,13 +1,13 @@
 const express =  require('express');
-const dotenv = require('dotenv');
 const cookieParser = require('cookie-parser');
 const hpp = require('hpp');
 const helmet = require('helmet');
 const xssClean = require('xss-clean');
 const morgan =  require('morgan');
-const multer = require('multer');
 const cors = require('cors');
 const mongoSanitize = require('express-mongo-sanitize');
+const bodyParser = require('body-parser');
+const multer =  require('multer');
 
 const errorHandler = require('./middleware/error');
 
@@ -28,10 +28,7 @@ app.use(express.json());
 // for parsing application/xwww-form-urlencoded
 app.use(express.urlencoded({extended: true}));
 
-// for parsing multipart/form-data
-// Middleware to upload files
-// const upload = multer();
-// app.use(upload.array()); 
+
 
 
 // Cookie parser

@@ -2,10 +2,15 @@ const express =  require('express');
 const router = express.Router();
 const { authorization } = require('../middleware/auth');
 const AuthController =  require('../controllers/auth');
+const multer =  require('multer');
 
-router.post('/register', AuthController.register);
+// for parsing multipart/form-data
+// Middleware to upload files
+const upload = multer();
 
-router.post('/login', AuthController.login);
+router.post('/register', upload.array(), AuthController.register);
+
+router.post('/login',upload.array(), AuthController.login);
 
 router.get('/logout',authorization, AuthController.logout);
 

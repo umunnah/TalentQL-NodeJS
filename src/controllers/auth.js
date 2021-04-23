@@ -9,22 +9,31 @@ const crypto = require('crypto');
 // @route POST /api/v1/auth/register
 // @access Public
 exports.register = asyncHandler(async (req,res,next) => {
-    const {first_name, last_name,email, password, phone} = req.body;
+	const {first_name, last_name,email, password, phone} = req.body;
+	console.log("abeg wetin do the body",req.body);
 
     // Create User
-	const user = await User.create({
-        first_name,last_name,email,password,phone
-    });
-
-    // Authenticate, login the user and return the user token
+	try {
+		const user = await User.create({first_name,last_name,email,password,phone});
+		await sendEmail({
+			email: user.email,
+			subject: 'Welcome to TalentQl',
+			message: `${user.first_name} welcome to TalenQl social network`
+		});
+		// Authenticate, login the user and return the user token
     sendTokenResponse(user,201,res);
+	} catch (e) {
+		return next(new ErrorResponse(e, 400))
+	}
+	
+
+    
 });
 
 // @desc login user
 // @route POST /api/v1/auth/login
 // @access Public
 exports.login = asyncHandler(async (req,res,next) => {
-	
     const {email, password} = req.body;
     // Create User
     const user = await User.findOne({email}).select('+password');
@@ -82,7 +91,7 @@ exports.forgotPassword = asyncHandler(async(req, res, next) => {
 
 	try {
 			await sendEmail({
-					email: "umunnaharinze@gmail.com",
+					email: user.email,
 					subject: 'Password reset token',
 					message
 			});
@@ -91,7 +100,6 @@ exports.forgotPassword = asyncHandler(async(req, res, next) => {
 					data: 'Email sent'
 			})
 	} catch (err) {
-			console.log(err);
 			user.resetPasswordToken = undefined;
 			user.resetPasswordExpire = undefined;
 			await user.save({ validateBeforeSave: false });
