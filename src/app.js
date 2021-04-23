@@ -13,6 +13,7 @@ const errorHandler = require('./middleware/error');
 
 // All Routes files
 const auth = require('./routes/auth');
+const post =  require('./routes/post');
 
 
 const app = express();
@@ -29,8 +30,8 @@ app.use(express.urlencoded({extended: true}));
 
 // for parsing multipart/form-data
 // Middleware to upload files
-const upload = multer();
-app.use(upload.array()); 
+// const upload = multer();
+// app.use(upload.array()); 
 
 
 // Cookie parser
@@ -55,6 +56,7 @@ app.use(hpp());
 
 // Mount imported routers
 app.use('/api/v1/auth', auth);
+app.use('/api/v1', post);
 
 
 app.use(errorHandler);
