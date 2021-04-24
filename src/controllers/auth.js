@@ -10,7 +10,6 @@ const crypto = require('crypto');
 // @access Public
 exports.register = asyncHandler(async (req,res,next) => {
 	const {first_name, last_name,email, password, phone} = req.body;
-	console.log("abeg wetin do the body",req.body);
 
     // Create User
 	try {
@@ -23,7 +22,7 @@ exports.register = asyncHandler(async (req,res,next) => {
 		// Authenticate, login the user and return the user token
     sendTokenResponse(user,201,res);
 	} catch (e) {
-		return next(new ErrorResponse(e, 400))
+		return next(new ErrorResponse(e, 422))
 	}
 	
 
@@ -74,7 +73,7 @@ exports.profile = asyncHandler(async (req,res,next) => {
 });
 
 //@desc  Forgot password
-//@route POST /api/v1/auth/forgotpassword
+//@route PUT /api/v1/auth/forgot-password
 //@accss Public
 exports.forgotPassword = asyncHandler(async(req, res, next) => {
 	const user = await User.findOne({ email: req.body.email });

@@ -44,7 +44,7 @@ exports.createPost = asyncHandler(async(req, res, next) => {
 			const post = await Post.create(req.body);
 			res.status(201).json({ success: true, data: post });
 		} catch (e) {
-			return next(new ErrorResponse(e, 400));
+			return next(new ErrorResponse(e, 422));
 		}
 });
 
@@ -64,7 +64,7 @@ exports.updatePost = asyncHandler(async(req, res, next) => {
 
 	try {
 			let urls = [];
-			if (req.files.length > 0) {
+			if (req.files && req.files.length > 0) {
 				const files = req.files
 				let multiple = async(path) => await new cloudinary(path).upload();
 				for (const file of files) {
@@ -92,7 +92,7 @@ exports.deletePost = asyncHandler(async(req, res, next) => {
     const checkPost = await Post.findById(req.params.id);
     if (checkPost.user != req.user.id) return next(new ErrorResponse("Not Authorized", 403));
 		try {
-			const post = await post.findByIdAndDelete(req.params.id)
+			const post = await Post.findByIdAndDelete(req.params.id)
       res.status(200).json({ success: true, data: "Post Successfully deleted" });
 		} catch (e) {
 			return next(new ErrorResponse(e, 400));

@@ -6,7 +6,7 @@
   "scripts": {
     "start": "SET NODE_ENV=production & node index",
     "dev": "nodemon index",
-    "test": "mocha ./**/*.spec.js --recursive --exit"
+    "test": "mocha --timeout 60000 --watch"
   },
   "repository": {
     "type": "git",
@@ -24,6 +24,8 @@
     "mocha": "^8.3.2",
     "mockgoose": "^8.0.4",
     "mongo-unit": "^2.0.1",
+    "mongodb-memory-server": "^6.9.6",
+    "mongodb-memory-server-global": "^6.9.6",
     "nodemon": "^2.0.7",
     "sinon": "^7.5.0",
     "sinon-mongoose": "^2.3.0",
