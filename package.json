@@ -6,7 +6,8 @@
   "scripts": {
     "start": "SET NODE_ENV=production & node index",
     "dev": "nodemon index",
-    "test": "mocha --timeout 60000 --watch"
+    "test": "mocha --timeout 60000",
+    "coverage": "nyc --reporter=html mocha --timeout 60000"
   },
   "repository": {
     "type": "git",
@@ -27,8 +28,7 @@
     "mongodb-memory-server": "^6.9.6",
     "mongodb-memory-server-global": "^6.9.6",
     "nodemon": "^2.0.7",
-    "sinon": "^7.5.0",
-    "sinon-mongoose": "^2.3.0",
+    "nyc": "^15.1.0",
     "supertest": "^6.1.3"
   },
   "dependencies": {
