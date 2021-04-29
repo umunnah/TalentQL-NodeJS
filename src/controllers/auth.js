@@ -3,6 +3,7 @@ const ErrorResponse =  require('../utils/errorResponse');
 const asyncHandler =  require('../middleware/async');
 const sendEmail = require('../utils/sendEmail');
 const crypto = require('crypto');
+const UserRepository = require('../repository/UserRepository');
 
 
 // @desc create user
@@ -13,7 +14,7 @@ exports.register = asyncHandler(async (req,res,next) => {
 
     // Create User
 	try {
-		const user = await User.create({first_name,last_name,email,password,phone});
+		const user = await UserRepository.create({first_name,last_name,email,password,phone});
 		await sendEmail({
 			email: user.email,
 			subject: 'Welcome to TalentQl',
@@ -35,7 +36,7 @@ exports.register = asyncHandler(async (req,res,next) => {
 exports.login = asyncHandler(async (req,res,next) => {
     const {email, password} = req.body;
     // Create User
-    const user = await User.findOne({email}).select('+password');
+    const user = await UserRepository.findOneWithSelect({email: email});
     
     if (!user) {
         return next(new ErrorResponse('Invalid credentials', 401));
@@ -68,15 +69,15 @@ exports.logout = asyncHandler(async (req,res,next) => {
 // @route GET /api/v1/auth/profile
 // @access Private
 exports.profile = asyncHandler(async (req,res,next) => {
-	const user = await User.findById(req.user.id);
+	const user = await UserRepository.findById(req.user.id);
 	res.status(200).json({success: true,data: user}); 
 });
 
 //@desc  Forgot password
-//@route PUT /api/v1/auth/forgot-password
+//@route POST /api/v1/auth/forgot-password
 //@accss Public
 exports.forgotPassword = asyncHandler(async(req, res, next) => {
-	const user = await User.findOne({ email: req.body.email });
+	const user = await UserRepository.findOne({ email: req.body.email });
 	if (!user) {
 			return next(new ErrorResponse(`There is no user with this email ${req.body.email}`,422))
 	}
@@ -117,7 +118,7 @@ exports.resetPassword = asyncHandler(async (req,res,next) => {
 	.update(req.params.resetpasswordtoken)
 	.digest('hex');
 
-	const user = await User.findOne({
+	const user = await UserRepository.findOne({
 		resetPasswordToken,
 		resetPasswordExpire: { $gt : Date.now()}
 	});
